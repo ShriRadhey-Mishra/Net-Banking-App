@@ -1,21 +1,34 @@
-/* Sign Up
+/**
+ * Functionality - Sign Up
  * Name
  * email
  * phone number
- * set up pin
+ * set up PIN
  * save
+ */
+
+/**
+ * Functionality - Sign In
+ * username or email
+ * password
+ * check
  * */
 
-/* Sign In
-* username or email
-* password
-* check
-* */
 
-/* Account Check Up
+/**
+ * Functionality - Actions
+ * Make Transaction
+ * take loan
+ * pay loan
+ * */
+
+/** Functionality - Management
+ * Manage App
+ * take PIN to check all these
+ * Account Check Up
  * Balance Check
  * Transaction check
- *
+ * Loans
  * */
 
 
