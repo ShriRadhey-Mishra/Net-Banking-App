@@ -3,10 +3,14 @@
  * email
  * phone number
  * set up pin
- *
+ * save
  * */
 
-/* Sign In */
+/* Sign In
+* username or email
+* password
+* check
+* */
 
 /* Account Check Up
  * Balance Check
