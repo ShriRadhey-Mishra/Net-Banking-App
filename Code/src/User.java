@@ -3,6 +3,8 @@ public class User {
     public long phoneNumber;
     public String pin;
 
+    public User() {}
+
     public User(String name, String email, String password, long phoneNumber, String pin) {
         this.name = name;
         this.email = email;
