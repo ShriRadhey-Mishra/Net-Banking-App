@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-//    email should contain a-z A-Z 0-9 . @ .com
+//    Email should contain a-z A-Z 0-9 . @ .com - Done
     public static boolean validateEMail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
@@ -100,6 +100,7 @@ public class Main {
         return null;
     }
 
+//    Main working method
     public static void main(String[] args) {
         User user = new User();
         Scanner scan = new Scanner(System.in);
