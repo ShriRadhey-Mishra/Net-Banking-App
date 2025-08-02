@@ -3,7 +3,7 @@
  * Make Transaction
  * take loan
  * pay loan
- * */
+ */
 
 /** Functionality - Management
  * Manage App
@@ -14,26 +14,27 @@
  * Loans
  * */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
 
-//    Email should contain a-z A-Z 0-9 . @ .com - Done
-    public static boolean validateEMail(String email) {
+    //    Email should contain a-z A-Z 0-9 . @ .com - Done
+    public static boolean invalidateEMail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.matches();
+        return !matcher.matches();
     }
 
-//    Sign up method - Done
+    //    Sign up method - Done
     public static User SignUp() {
         Scanner scan = new Scanner(System.in);
         // takes username
@@ -42,7 +43,7 @@ public class Main {
         // takes user's email
         System.out.print("Enter your email: ");
         String email = scan.nextLine().trim().toLowerCase();
-        while (!validateEMail(email)) {
+        while (invalidateEMail(email)) {
             System.out.print("Enter a valid email: ");
             email = scan.nextLine();
         }
@@ -79,28 +80,67 @@ public class Main {
         } catch (IOException e) {
             System.out.println("An error occurred while processing the user data.\n" + e.getMessage());
         }
-        // return a User object with these values initialised
-        return new User(name, email, password, phoneNumber, pin);
+
+        System.out.println("Successfully created your user account! \nProceed to Log In");
+        return SignIn();
     }
 
-//    Sign in method
+    //    Sign in method
     public static User SignIn() {
         Scanner scan = new Scanner(System.in);
 
-//        Check if username or password exists
-        System.out.print("Username (or Email): ");
-        String userNameOrEmail = scan.nextLine();
+        //  Check if username or password exists
+        System.out.print("Enter your email: ");
+        String email = scan.nextLine();
+        while (invalidateEMail(email)) {
+            System.out.print("Enter your email: ");
+            System.out.println("Invalid email.");
+            email = scan.nextLine();
+        }
 
-//        Check if this password is associated with this username or email
-        System.out.print("Password: ");
+        //  Check if this password is associated with this username or email
+        System.out.print("Enter your password: ");
         String password = scan.nextLine();
 
-//        retrieve the other detail from the database
-//        return new User(name, email, password, phoneNumber, pin);
+        //  retrieve the other detail from the database
+        File directory = new File("UserData");
+        String searchTerm = email.toLowerCase().split("@")[0] + ".txt";
+        String file = "";
+        File[] matchingFiles = directory.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.contains(searchTerm);
+            }
+        });
+        // uses email to find file in the Local file system
+        if (matchingFiles != null) {
+            for (File files : matchingFiles) {
+                file = files.getName();
+            }
+            try {
+                // when file is found it collects userdata
+                List<String> data = new ArrayList<>();
+                File userData = new File("UserData", file);
+                Scanner scanner = new Scanner(userData);
+                while (scanner.hasNextLine()) {
+                    data.add(scanner.nextLine());
+                }
+                scanner.close();
+                // if password matches with the one in the file it returns user else it returns null
+                if (!Objects.equals(data.get(2), password)) {
+                    System.out.println("User not found: UserData (Access Denied)");
+                    return null;
+                } else return new User(data.get(0), email, password, Long.parseLong(data.get(3)), data.get(4));
+
+            } catch (FileNotFoundException e) {
+                System.out.println("User not found: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Data not found!");
+        }
         return null;
     }
 
-//    Main working method
+    //    Main working method
     public static void main(String[] args) {
         User user = new User();
         Scanner scan = new Scanner(System.in);
@@ -116,16 +156,16 @@ public class Main {
                 System.out.println("An error occurred while processing the user data.\n" + e.getMessage());
 
             }
-        }
-        else if (userInput == 2) user = SignIn();
+        } else if (userInput == 2) user = SignIn();
         else System.out.println("See you soon!");
 
-//        assert user != null;
-//        System.out.println(user.name);
-//        System.out.println(user.email);
-//        System.out.println(user.password);
-//        System.out.println(user.phoneNumber);
-//        System.out.println(user.pin);
+        if (user != null) {
+            System.out.println(user.name);
+            System.out.println(user.email);
+            System.out.println(user.password);
+            System.out.println(user.phoneNumber);
+            System.out.println(user.pin);
+        }
     }
 
 }
