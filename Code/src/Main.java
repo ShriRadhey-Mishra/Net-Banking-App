@@ -24,6 +24,11 @@ import java.util.regex.Pattern;
 
 public class Main {
 
+    // clear terminal
+    public static void cleanTerminal() {
+        for (int i = 0; i < 50; ++i) System.out.println();
+    }
+
     //    Email should contain a-z A-Z 0-9 . @ .com - Done
     public static boolean invalidateEMail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -35,7 +40,7 @@ public class Main {
     }
 
     //    Sign up method - Done
-    public static User SignUp() {
+    public static User SignUp() throws InterruptedException {
         Scanner scan = new Scanner(System.in);
         // takes username
         System.out.print("Enter your name: ");
@@ -45,7 +50,7 @@ public class Main {
         String email = scan.nextLine().trim().toLowerCase();
         while (invalidateEMail(email)) {
             System.out.print("Enter a valid email: ");
-            email = scan.nextLine();
+            email = scan.nextLine().trim().toLowerCase();
         }
         // takes user's password
         System.out.print("Create a Password: ");
@@ -66,7 +71,7 @@ public class Main {
             pin = scan.nextLine();
         }
         // Saves all this data in File
-        String fileName = name.toLowerCase().replace(" ", "").replace(".", "") + "@" + email.toLowerCase().split("@")[0] + ".txt";
+        String fileName = name.toLowerCase().replace(" ", "").replace(".", "") + "@" + email.replace(".", "").split("@")[0] + ".txt";
         try {
             File userData = new File("UserData/", fileName);
             if (!userData.exists()) {
@@ -82,6 +87,7 @@ public class Main {
         }
 
         System.out.println("Successfully created your user account! \nProceed to Log In");
+        Thread.sleep(3000);
         return SignIn();
     }
 
@@ -91,11 +97,11 @@ public class Main {
 
         //  Check if username or password exists
         System.out.print("Enter your email: ");
-        String email = scan.nextLine();
+        String email = scan.nextLine().trim().toLowerCase();
         while (invalidateEMail(email)) {
             System.out.print("Enter your email: ");
             System.out.println("Invalid email.");
-            email = scan.nextLine();
+            email = scan.nextLine().trim().toLowerCase();
         }
 
         //  Check if this password is associated with this username or email
@@ -104,7 +110,7 @@ public class Main {
 
         //  retrieve the other detail from the database
         File directory = new File("UserData");
-        String searchTerm = email.toLowerCase().split("@")[0] + ".txt";
+        String searchTerm = email.replace(".", "").split("@")[0] + ".txt";
         String file = "";
         File[] matchingFiles = directory.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -129,7 +135,10 @@ public class Main {
                 if (!Objects.equals(data.get(2), password)) {
                     System.out.println("User not found: UserData (Access Denied)");
                     return null;
-                } else return new User(data.get(0), email, password, Long.parseLong(data.get(3)), data.get(4));
+                } else {
+                    System.out.println("Log In Successful!");
+                    return new User(data.get(0), email, password, Long.parseLong(data.get(3)), data.get(4));
+                }
 
             } catch (FileNotFoundException e) {
                 System.out.println("User not found: " + e.getMessage());
@@ -141,30 +150,51 @@ public class Main {
     }
 
     //    Main working method
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         User user = new User();
         Scanner scan = new Scanner(System.in);
+        boolean wantToExit = false;
 
-        System.out.print("Choose one option: \n1. Sign Up \n2. Sign In \n3. Exit \n(Pick one number): ");
-        int userInput = scan.nextInt();
-        System.out.print('\n');
+        while (!wantToExit) {
+            System.out.println("Welcome to PayLynx - Your Net Banking Command Line!");
+            System.out.println("-----------------------------------------");
+            System.out.print("Choose one option: \n1. Sign Up \n2. Sign In \n3. Exit \n(Pick one number): ");
+            int userInput = scan.nextInt();
+            System.out.println("-----------------------------------------");
+            System.out.print('\n');
 
-        if (userInput == 1) {
-            try {
-                user = SignUp();
-            } catch (Exception e) {
-                System.out.println("An error occurred while processing the user data.\n" + e.getMessage());
+            if (userInput == 1) {
+                try {
+                    user = SignUp();
+                    Thread.sleep(3000);
+                } catch (Exception e) {
+                    System.out.println("An error occurred while processing the user data.\n" + e.getMessage());
+
+                }
+            }
+            else if (userInput == 2) {
+                user = SignIn();
 
             }
-        } else if (userInput == 2) user = SignIn();
-        else System.out.println("See you soon!");
+            else {
+                System.out.println("See you soon!");
+                Thread.sleep(3000);
+                user = null;
+                wantToExit = true;
+            }
 
-        if (user != null) {
-            System.out.println(user.name);
-            System.out.println(user.email);
-            System.out.println(user.password);
-            System.out.println(user.phoneNumber);
-            System.out.println(user.pin);
+            System.out.println("-----------------------------------------");
+            cleanTerminal();
+
+            if (user != null) {
+                System.out.println(user.name);
+                System.out.println(user.email);
+                System.out.println(user.password);
+                System.out.println(user.phoneNumber);
+                System.out.println(user.pin);
+            }
+
+            cleanTerminal();
         }
     }
 
