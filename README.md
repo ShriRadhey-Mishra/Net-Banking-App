@@ -1,4 +1,4 @@
-# Net-Banking-App
+# Net-Banking-App: PayLynx
 
 This project aims to simulate a **Net Banking / UPI application**. I am creating this application to strengthen my understanding of **Java concepts** and become familiar with real-world application development using Java.
 
