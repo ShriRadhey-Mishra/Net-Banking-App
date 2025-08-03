@@ -20,7 +20,7 @@ The application will serve as a simulation of a typical net banking experience, 
 
 🔐 Login / Sign In using:
 
-- Email or Username
+- Email
 
 - Password authentication
 
@@ -51,6 +51,7 @@ Through building this project, I aim to:
 
 - Practice **OOPs (Object-Oriented Programming)** principles
 - Understand how to structure **Java projects**
+- Understand how **File Handling** works in Java
 - Work with **data structures** to manage transactions and users
 - Simulate real-world banking functionality in a **console-based Java application**
 
