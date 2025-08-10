@@ -91,7 +91,7 @@ public class Main {
         return SignIn();
     }
 
-    //    Sign in method
+    //    Sign in method - Done
     public static User SignIn() {
         Scanner scan = new Scanner(System.in);
 
@@ -137,7 +137,7 @@ public class Main {
                     return null;
                 } else {
                     System.out.println("Log In Successful!");
-                    return new User(data.get(0), email, password, Long.parseLong(data.get(3)), data.get(4));
+                    return new User(data.get(0), data.get(1), data.get(2), Long.parseLong(data.get(3)), data.get(4));
                 }
 
             } catch (FileNotFoundException e) {
