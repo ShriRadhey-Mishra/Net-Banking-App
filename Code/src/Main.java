@@ -93,6 +93,7 @@ public class Main {
 
         System.out.println("Successfully created your user account! \nProceed to Log In");
         Thread.sleep(3000);
+        cleanTerminal();
         return SignIn();
     }
 
@@ -100,7 +101,10 @@ public class Main {
     public static User SignIn() {
         Scanner scan = new Scanner(System.in);
 
-        //  Check if username or password exists
+        //  Check if username and password exists
+        System.out.print("Enter your name: ");
+        String name = scan.nextLine();
+
         System.out.print("Enter your email: ");
         String email = scan.nextLine().trim().toLowerCase();
         while (invalidateEMail(email)) {
@@ -109,13 +113,13 @@ public class Main {
             email = scan.nextLine().trim().toLowerCase();
         }
 
-        //  Check if this password is associated with this username or email
+        //  Check if this password is associated with this username and email
         System.out.print("Enter your password: ");
         String password = scan.nextLine();
 
         //  retrieve the other detail from the database
         File mainFolder = new File("UserData");
-        String subFolderName = email.replace(".", "").split("@")[0];
+        String subFolderName = name.toLowerCase().replace(" ", "").replace(".", "") + "@" + email.replace(".", "").split("@")[0];
         File userFolder = new File(mainFolder, subFolderName);
         if (userFolder.exists() && userFolder.isDirectory()) {
            File credentials = new File(userFolder, "credentials.txt");
